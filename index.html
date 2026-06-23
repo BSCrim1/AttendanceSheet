@@ -96,37 +96,42 @@ small {
     document.getElementById("name").value = "";
   }
 
-  let data = [];
+let data = [];
 
-  col.onSnapshot(snapshot => {
-    data = [];
-    snapshot.forEach(doc => data.push(doc.data()));
-    render();
+function addName() {
+  let input = document.getElementById("name");
+  let name = input.value.trim();
+
+  if (!name) return;
+
+  data.push({
+    name: name,
+    time: new Date().toLocaleTimeString()
   });
 
-  function render() {
-    let list = document.getElementById("list");
-    let search = document.getElementById("search").value.toLowerCase();
+  input.value = "";
+  render();
+}
 
-    list.innerHTML = "";
+function render() {
+  let list = document.getElementById("list");
+  let count = document.getElementById("count");
 
-    let filtered = data.filter(d =>
-      d.name.toLowerCase().includes(search)
-    );
+  list.innerHTML = "";
 
-    filtered.sort((a,b)=>a.name.localeCompare(b.name));
+  data.sort((a, b) => a.name.localeCompare(b.name));
 
-    filtered.forEach(d => {
-      list.innerHTML += `
-        <div class="item">
-          ${d.name}
-          <small>${d.time}</small>
-        </div>
-      `;
-    });
+  data.forEach(d => {
+    list.innerHTML += `
+      <div class="item">
+        ${d.name}
+        <small>${d.time}</small>
+      </div>
+    `;
+  });
 
-    document.getElementById("total").innerText = filtered.length;
-  }
+  count.innerText = data.length;
+}
 </script>
 
 </body>
